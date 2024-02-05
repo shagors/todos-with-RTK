@@ -1,8 +1,9 @@
-import { FilePenLine, Trash2 } from "lucide-react";
+import { Trash2 } from "lucide-react";
 import { Button } from "../ui/button";
 // import { useAppDispatch } from "@/redux/hook";
-import { removeTodo, toggleComplete } from "@/redux/features/todoSlice";
-import { useUpdateTodoMutation } from "@/redux/api/api";
+// import { removeTodo, toggleComplete } from "@/redux/features/todoSlice";
+import { useDeleteTodoMutation, useUpdateTodoMutation } from "@/redux/api/api";
+import EditTodoModal from "./EditTodoModal";
 
 type TTodoCardProps = {
   _id: string;
@@ -21,7 +22,8 @@ const TodoCard = ({
 }: TTodoCardProps) => {
   // const dispatch = useAppDispatch();
 
-  const [updateTodo, { isLoading }] = useUpdateTodoMutation();
+  const [updateTodo] = useUpdateTodoMutation();
+  const [deleteTodo] = useDeleteTodoMutation();
 
   const handleToggleState = () => {
     // dispatch(toggleComplete(id));
@@ -38,6 +40,11 @@ const TodoCard = ({
     };
 
     updateTodo(options);
+  };
+
+  const deleteTodoServer = (id) => {
+    deleteTodo(id);
+    // console.log(id);
   };
 
   return (
@@ -72,12 +79,15 @@ const TodoCard = ({
       </div>
       <p className="flex-[2]">{description}</p>
       <div className="space-x-5">
-        <Button onClick={() => dispatch(removeTodo(id))} className="bg-red-500">
+        <Button className="bg-red-500" onClick={() => deleteTodoServer(_id)}>
           <Trash2 className="size-5" />
         </Button>
-        <Button className="bg-[#5C53FE]">
-          <FilePenLine className="size-5" />
-        </Button>
+        <EditTodoModal
+          _id={_id}
+          title={title}
+          description={description}
+          priority={priority}
+        />
       </div>
     </div>
   );
