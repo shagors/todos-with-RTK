@@ -11,7 +11,8 @@ export const store = configureStore({
     getDefaultMiddleware().concat(baseApi.middleware),
 });
 
-// Infer the `RootState` and `AppDispatch` types from the store itself
+// Define RootState first
 export type RootState = ReturnType<typeof store.getState>;
-// Inferred type: {posts: PostsState, comments: CommentsState, users: UsersState}
+
+// Then define AppDispatch using RootState
 export type AppDispatch = typeof store.dispatch;
